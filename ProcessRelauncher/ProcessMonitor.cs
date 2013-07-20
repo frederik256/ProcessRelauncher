@@ -19,17 +19,18 @@ namespace ProcessRelauncher
         }
 
         public void Monitor(object o)
-        {            
-            Process[] processlist = Process.GetProcesses();            
+        {
+            Process[] processlist = Process.GetProcesses();
 
-            foreach(var p in processlist)
+            foreach (var p in processlist)
             {
                 if (p.ProcessName.ToLower().Equals(_processName)) return;
             }
-            
+
 
             Process.Start(_processStartInfo);
-            
+            processlist = null;
+
             GC.Collect();
         }
 
@@ -42,6 +43,8 @@ namespace ProcessRelauncher
 
         public void Dispose()
         {
+            if (_timer == null) return;
+            
             _timer.Dispose();
         }
     }
