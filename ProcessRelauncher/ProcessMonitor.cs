@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading;
 
 namespace ProcessRelauncher
@@ -23,15 +22,15 @@ namespace ProcessRelauncher
         {            
             Process[] processlist = Process.GetProcesses();            
 
-            if (processlist.Any(theprocess => theprocess.ProcessName.ToLower().Equals(_processName)))
+            foreach(var p in processlist)
             {
-                Console.WriteLine(_processName + " is running");
-                return;
+                if (p.ProcessName.ToLower().Equals(_processName)) return;
             }
+            
 
             Process.Start(_processStartInfo);
             
-            Console.WriteLine("Spawning " + _processName);
+            GC.Collect();
         }
 
         public void Start()
