@@ -24,11 +24,14 @@ namespace ProcessRelauncher
 
             foreach (var p in processlist)
             {
-                if (p.ProcessName.ToLower().Equals(_processName)) return;
+                if (p.ProcessName.ToLower().Equals(_processName)) goto cleanup;
             }
 
 
             Process.Start(_processStartInfo);
+
+            // Forcing GC to keep footprint as small as possible. 
+            cleanup:
             processlist = null;
 
             GC.Collect();
